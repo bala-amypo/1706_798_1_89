@@ -2,12 +2,19 @@ package com.example.demo.repository;
 
 import com.example.demo.model.CategorizationRule;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface CategorizationRuleRepository
         extends JpaRepository<CategorizationRule, Long> {
 
-    List<CategorizationRule> findMatchingRulesByDescription(String description);
-
+    @Query("""
+        SELECT r
+        FROM CategorizationRule r
+        WHERE :description LIKE CONCAT('%', r.keyword, '%')
+    """)
+    List<CategorizationRule> findMatchingRulesByDescription(
+            @Param("description") String description);
 }
