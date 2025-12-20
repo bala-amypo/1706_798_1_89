@@ -1,0 +1,52 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(
+    name = "vendors",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "vendorName")
+    }
+)
+public class Vendor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String vendorName;
+
+    @Email
+    private String contactEmail;
+
+    private String address;
+
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToMany(mappedBy = "favoriteVendors")
+    private Set<User> users = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public String getVendorName() { return vendorName; }
+    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+}
