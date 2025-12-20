@@ -5,9 +5,11 @@ import com.example.demo.model.CategorizationRule;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.CategorizationRuleRepository;
 import com.example.demo.service.CategorizationRuleService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CategorizationRuleServiceImpl implements CategorizationRuleService {
 
     private final CategorizationRuleRepository ruleRepository;
@@ -24,7 +26,6 @@ public class CategorizationRuleServiceImpl implements CategorizationRuleService 
     public CategorizationRule createRule(Long categoryId, CategorizationRule rule) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-
         rule.setCategory(category);
         return ruleRepository.save(rule);
     }

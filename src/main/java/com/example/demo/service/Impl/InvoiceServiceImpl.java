@@ -9,7 +9,7 @@ import com.example.demo.repository.VendorRepository;
 import com.example.demo.service.InvoiceService;
 
 import java.util.List;
-
+@Service
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
