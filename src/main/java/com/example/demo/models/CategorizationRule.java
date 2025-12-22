@@ -15,6 +15,7 @@ public class CategorizationRule {
     private String keyword;
     private String matchType;
     private Integer priority;
+
     private LocalDateTime createdAt;
 
     @ManyToOne
@@ -26,10 +27,25 @@ public class CategorizationRule {
         this.createdAt = LocalDateTime.now();
     }
 
-    public String getKeyword() { return keyword; }
-    public String getMatchType() { return matchType; }
-    public Integer getPriority() { return priority; }
+    // ===== GETTERS =====
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getMatchType() {
+        return matchType;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    // ===== SETTERS =====
     public void setCategory(Category category) {
-    this.category = category;
-    public Category getCategory() { return category; }
+        this.category = category;
+    }
 }
