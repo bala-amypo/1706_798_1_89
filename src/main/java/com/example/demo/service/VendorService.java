@@ -5,9 +5,9 @@ import com.example.demo.model.Vendor;
 
 public interface VendorService {
 
-    Vendor createVendor(Vendor vendor);
+    Vendor create(Vendor vendor);
 
-    Vendor getVendor(Long id);
+    List<Vendor> getAll();
 
-    List<Vendor> getAllVendors();
+    Vendor getById(Long id);
 }

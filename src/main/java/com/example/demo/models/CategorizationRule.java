@@ -29,5 +29,7 @@ public class CategorizationRule {
     public String getKeyword() { return keyword; }
     public String getMatchType() { return matchType; }
     public Integer getPriority() { return priority; }
+    public void setCategory(Category category) {
+    this.category = category;
     public Category getCategory() { return category; }
 }

@@ -7,10 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(
-    name = "invoices",
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = { "vendor_id", "invoiceNumber" }
-    )
+    uniqueConstraints = @UniqueConstraint(columnNames = {"vendor_id","invoiceNumber"})
 )
 public class Invoice {
 
@@ -19,7 +16,6 @@ public class Invoice {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "vendor_id", nullable = false)
     private Vendor vendor;
 
     private String invoiceNumber;
@@ -28,11 +24,9 @@ public class Invoice {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "uploaded_by_id", nullable = false)
     private User uploadedBy;
 
     private LocalDateTime uploadedAt;
@@ -42,7 +36,23 @@ public class Invoice {
         this.uploadedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public String getDescription() { return description; }
-    public void setCategory(Category category) { this.category = category; }
+    public Double getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
+
+    public void setUploadedBy(User uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }

@@ -5,9 +5,9 @@ import com.example.demo.model.Category;
 
 public interface CategoryService {
 
-    Category createCategory(Category category);
+    Category create(Category category);
 
-    Category getCategory(Long id);
+    List<Category> getAll();
 
-    List<Category> getAllCategories();
+    Category getById(Long id);
 }

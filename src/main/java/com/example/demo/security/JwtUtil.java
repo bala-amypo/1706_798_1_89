@@ -1,8 +1,6 @@
 package com.example.demo.security;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -12,25 +10,24 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 
-    private final String SECRET = "verysecretkey1234567890";
-    private final long EXPIRATION = 1000 * 60 * 60 * 24;
+    private final String SECRET = "secretkey123";
 
-    public String generateToken(Long userId,
-                                String email,
-                                String role) {
-
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("email", email);
-        claims.put("role", role);
-
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(email)
+                .claim("userId", userId)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(
-                        System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
+    }
+
+    public String extractUsername(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }
