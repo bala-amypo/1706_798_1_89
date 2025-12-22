@@ -26,12 +26,16 @@ public class InvoiceController {
 
     @PostMapping("/categorize/{invoiceId}")
     public Invoice categorize(@PathVariable Long invoiceId) {
-        return invoiceService.categorize(invoiceId);
+        return invoiceService.categorizeInvoice(invoiceId);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Invoice> userInvoices(@PathVariable Long userId) {
-        return invoiceService.getUserInvoices(userId);
+    public List<Invoice> byUser(@PathVariable Long userId) {
+        return invoiceService.getInvoicesByUser(userId);
+    }
+
+    @GetMapping("/{invoiceId}")
+    public Invoice get(@PathVariable Long invoiceId) {
+        return invoiceService.getInvoice(invoiceId);
     }
 }
-    

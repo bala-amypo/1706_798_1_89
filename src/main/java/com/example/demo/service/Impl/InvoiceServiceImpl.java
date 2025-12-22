@@ -1,38 +1,52 @@
-package com.example.demo.service.Impl;
-
-import com.example.demo.model.Invoice;
-import com.example.demo.model.User;
-import com.example.demo.model.Vendor;
-import com.example.demo.repository.InvoiceRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.repository.VendorRepository;
-import com.example.demo.service.InvoiceService;
-import org.springframework.stereotype.Service;
+package com.example.demo.service.impl;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
+import com.example.demo.service.InvoiceService;
+import com.example.demo.util.InvoiceCategorizationEngine;
+
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final UserRepository userRepository;
     private final VendorRepository vendorRepository;
+    private final CategorizationRuleRepository ruleRepository;
+    private final InvoiceCategorizationEngine engine;
 
     public InvoiceServiceImpl(
             InvoiceRepository invoiceRepository,
             UserRepository userRepository,
-            VendorRepository vendorRepository) {
+            VendorRepository vendorRepository,
+            CategorizationRuleRepository ruleRepository,
+            InvoiceCategorizationEngine engine) {
+
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
         this.vendorRepository = vendorRepository;
+        this.ruleRepository = ruleRepository;
+        this.engine = engine;
     }
 
     @Override
     public Invoice uploadInvoice(Long userId, Long vendorId, Invoice invoice) {
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
         Vendor vendor = vendorRepository.findById(vendorId)
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Vendor not found"));
+
+        if (invoice.getAmount() <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
 
         invoice.setUploadedBy(user);
         invoice.setVendor(vendor);
@@ -42,14 +56,27 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Invoice categorizeInvoice(Long invoiceId) {
-        return invoiceRepository.findById(invoiceId)
-                .orElseThrow(() -> new RuntimeException("Invoice not found"));
+
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Invoice not found"));
+
+        List<CategorizationRule> rules =
+                ruleRepository.findMatchingRulesByDescription(
+                        invoice.getDescription());
+
+        invoice.setCategory(
+                engine.determineCategory(invoice, rules));
+
+        return invoiceRepository.save(invoice);
     }
 
     @Override
     public List<Invoice> getInvoicesByUser(Long userId) {
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
         return invoiceRepository.findByUploadedBy(user);
     }
@@ -57,6 +84,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Invoice getInvoice(Long invoiceId) {
         return invoiceRepository.findById(invoiceId)
-                .orElseThrow(() -> new RuntimeException("Invoice not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Invoice not found"));
     }
 }
