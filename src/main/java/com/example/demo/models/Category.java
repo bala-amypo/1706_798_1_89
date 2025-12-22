@@ -1,9 +1,13 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
+@Table(
+    name = "categories",
+    uniqueConstraints = @UniqueConstraint(columnNames = "categoryName")
+)
 public class Category {
 
     @Id
@@ -12,6 +16,12 @@ public class Category {
 
     private String categoryName;
     private String description;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getId() { return id; }
 }

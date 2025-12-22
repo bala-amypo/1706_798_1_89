@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
@@ -11,32 +12,28 @@ import com.example.demo.model.Invoice;
 @Component
 public class InvoiceCategorizationEngine {
 
-    public Category determineCategory(Invoice invoice,
-                                      List<CategorizationRule> rules) {
+    public Category determineCategory(
+            Invoice invoice,
+            List<CategorizationRule> rules) {
 
-        String description = invoice.getDescription();
+        rules.sort((a, b) -> b.getPriority() - a.getPriority());
 
         for (CategorizationRule rule : rules) {
 
-            // EXACT match
-            if ("EXACT".equalsIgnoreCase(rule.getRuleType())
-                    && description.equals(rule.getPattern())) {
-                return rule.getCategory();
-            }
+            String desc = invoice.getDescription();
 
-            // CONTAINS match
-            if ("CONTAINS".equalsIgnoreCase(rule.getRuleType())
-                    && description.contains(rule.getPattern())) {
+            if ("EXACT".equals(rule.getMatchType()) &&
+                desc.equalsIgnoreCase(rule.getKeyword()))
                 return rule.getCategory();
-            }
 
-            // REGEX match
-            if ("REGEX".equalsIgnoreCase(rule.getRuleType())
-                    && description.matches(rule.getPattern())) {
+            if ("CONTAINS".equals(rule.getMatchType()) &&
+                desc.toLowerCase().contains(rule.getKeyword().toLowerCase()))
                 return rule.getCategory();
-            }
+
+            if ("REGEX".equals(rule.getMatchType()) &&
+                Pattern.compile(rule.getKeyword()).matcher(desc).find())
+                return rule.getCategory();
         }
-
-        return null; // No rule matched
+        return null;
     }
 }
