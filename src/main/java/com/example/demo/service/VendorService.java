@@ -1,13 +1,32 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Vendor;
 import java.util.List;
 
-public interface VendorService {
+import org.springframework.stereotype.Service;
 
-    Vendor createVendor(Vendor vendor);
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Vendor;
+import com.example.demo.repository.VendorRepository;
 
-    Vendor getVendor(Long vendorId);
+@Service
+public class VendorService {
 
-    List<Vendor> getAllVendors();
+    private final VendorRepository vendorRepository;
+
+    public VendorService(VendorRepository vendorRepository) {
+        this.vendorRepository = vendorRepository;
+    }
+
+    public Vendor create(Vendor vendor) {
+        return vendorRepository.save(vendor);
+    }
+
+    public List<Vendor> getAll() {
+        return vendorRepository.findAll();
+    }
+
+    public Vendor getById(Long id) {
+        return vendorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+    }
 }

@@ -1,13 +1,41 @@
 package com.example.demo.service;
 
-import com.example.demo.model.User;
 import java.util.List;
 
-public interface UserService {
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-    User registerUser(User user);
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 
-    User findByEmail(String email);
+@Service
+public class UserService {
 
-    List<User> getAllUsers();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    // ✅ Constructor Injection (MANDATORY)
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User register(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
 }
