@@ -1,15 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
-import com.example.demo.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "Users Endpoints")
 public class UserController {
 
     private final UserService userService;
@@ -19,21 +18,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
+    public User register(@RequestBody User user) {
+        return userService.register(user);
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
+    public List<User> all() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getAllUsers()
-                .stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public User get(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 }

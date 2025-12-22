@@ -1,15 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Invoice;
-import com.example.demo.service.InvoiceService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.Invoice;
+import com.example.demo.service.InvoiceService;
 
 @RestController
 @RequestMapping("/api/invoices")
-@Tag(name = "Invoices Endpoints")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
@@ -19,25 +18,19 @@ public class InvoiceController {
     }
 
     @PostMapping("/upload/{userId}/{vendorId}")
-    public Invoice uploadInvoice(
-            @PathVariable Long userId,
-            @PathVariable Long vendorId,
-            @RequestBody Invoice invoice) {
+    public Invoice upload(@PathVariable Long userId,
+                          @PathVariable Long vendorId,
+                          @RequestBody Invoice invoice) {
         return invoiceService.uploadInvoice(userId, vendorId, invoice);
     }
 
     @PostMapping("/categorize/{invoiceId}")
-    public Invoice categorizeInvoice(@PathVariable Long invoiceId) {
-        return invoiceService.categorizeInvoice(invoiceId);
+    public Invoice categorize(@PathVariable Long invoiceId) {
+        return invoiceService.categorize(invoiceId);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Invoice> getInvoicesByUser(@PathVariable Long userId) {
-        return invoiceService.getInvoicesByUser(userId);
-    }
-
-    @GetMapping("/{invoiceId}")
-    public Invoice getInvoice(@PathVariable Long invoiceId) {
-        return invoiceService.getInvoice(invoiceId);
+    public List<Invoice> userInvoices(@PathVariable Long userId) {
+        return invoiceService.getUserInvoices(userId);
     }
 }

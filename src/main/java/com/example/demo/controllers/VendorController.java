@@ -1,15 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Vendor;
-import com.example.demo.service.VendorService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.model.Vendor;
+import com.example.demo.service.VendorService;
 
 @RestController
 @RequestMapping("/api/vendors")
-@Tag(name = "Vendors Endpoints")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -19,17 +18,17 @@ public class VendorController {
     }
 
     @PostMapping
-    public Vendor createVendor(@RequestBody Vendor vendor) {
-        return vendorService.createVendor(vendor);
+    public Vendor create(@RequestBody Vendor vendor) {
+        return vendorService.create(vendor);
     }
 
     @GetMapping
-    public List<Vendor> getAllVendors() {
-        return vendorService.getAllVendors();
+    public List<Vendor> list() {
+        return vendorService.getAll();
     }
 
-    @GetMapping("/{vendorId}")
-    public Vendor getVendor(@PathVariable Long vendorId) {
-        return vendorService.getVendor(vendorId);
+    @GetMapping("/{id}")
+    public Vendor get(@PathVariable Long id) {
+        return vendorService.getById(id);
     }
 }
