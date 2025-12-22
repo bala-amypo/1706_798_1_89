@@ -5,10 +5,9 @@ import com.example.demo.model.User;
 
 public interface UserService {
 
-    User registerUser(User user);
+    User register(User user);
 
-    User findByEmail(String email);
+    User getUser(Long id);
 
     List<User> getAllUsers();
 }
-    

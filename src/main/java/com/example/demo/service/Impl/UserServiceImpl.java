@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(User user) {
+    public User register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public User getUser(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
     }
