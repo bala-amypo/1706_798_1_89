@@ -1,37 +1,22 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.CategorizationRule;
-import com.example.demo.service.CategorizationRuleService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import com.example.demo.model.CategorizationRule;
+import com.example.demo.service.impl.CategorizationRuleServiceImpl;
 
 @RestController
 @RequestMapping("/api/rules")
-@Tag(name = "Categorization Rules Endpoints")
 public class CategorizationRuleController {
 
-    private final CategorizationRuleService ruleService;
+    private final CategorizationRuleServiceImpl service;
 
-    public CategorizationRuleController(CategorizationRuleService ruleService) {
-        this.ruleService = ruleService;
+    public CategorizationRuleController(CategorizationRuleServiceImpl service) {
+        this.service = service;
     }
 
-    @PostMapping("/category/{categoryId}")
-    public CategorizationRule createRule(
-            @PathVariable Long categoryId,
-            @RequestBody CategorizationRule rule) {
-        return ruleService.createRule(categoryId, rule);
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public List<CategorizationRule> getRulesByCategory(@PathVariable Long categoryId) {
-        return ruleService.getRulesByCategory(categoryId);
-    }
-
-    @DeleteMapping("/{ruleId}")
-    public void deleteRule(@PathVariable Long ruleId) {
-        ruleService.deleteRule(ruleId);
+    @GetMapping("/match")
+    public List<CategorizationRule> matchRules(@RequestParam String text) {
+        return service.getMatchingRules(text);
     }
 }
