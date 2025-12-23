@@ -11,5 +11,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     List<Invoice> findByUploadedBy(User user);
 
-    List<Invoice> findByAmountGreaterThanHql(Double amount);
+    List<Invoice> findByAmountGreaterThan(Double amount);
 }
