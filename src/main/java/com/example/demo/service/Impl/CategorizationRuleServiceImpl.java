@@ -1,10 +1,23 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.repository.*;
+import com.example.demo.model.CategorizationRule;
+import com.example.demo.repository.CategorizationRuleRepository;
+import com.example.demo.service.CategorizationRuleService;
+import org.springframework.stereotype.Service;
 
-public class CategorizationRuleServiceImpl {
+import java.util.List;
 
-    public CategorizationRuleServiceImpl(
-            CategorizationRuleRepository ruleRepo,
-            CategoryRepository categoryRepo) {}
+@Service
+public class CategorizationRuleServiceImpl implements CategorizationRuleService {
+
+    private final CategorizationRuleRepository repository;
+
+    public CategorizationRuleServiceImpl(CategorizationRuleRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public List<CategorizationRule> findMatchingRules(String description) {
+        return repository.findMatchingRulesByDescription(description);
+    }
 }

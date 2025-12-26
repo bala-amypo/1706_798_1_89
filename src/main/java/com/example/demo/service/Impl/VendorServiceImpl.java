@@ -2,16 +2,32 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.Vendor;
 import com.example.demo.repository.VendorRepository;
+import com.example.demo.service.VendorService;
+import org.springframework.stereotype.Service;
 
-public class VendorServiceImpl {
+import java.util.List;
 
-    private final VendorRepository repo;
+@Service
+public class VendorServiceImpl implements VendorService {
 
-    public VendorServiceImpl(VendorRepository repo) {
-        this.repo = repo;
+    private final VendorRepository vendorRepository;
+
+    public VendorServiceImpl(VendorRepository vendorRepository) {
+        this.vendorRepository = vendorRepository;
     }
 
-    public Vendor createVendor(Vendor vendor) {
-        return repo.save(vendor);
+    @Override
+    public Vendor create(Vendor vendor) {
+        return vendorRepository.save(vendor);
+    }
+
+    @Override
+    public List<Vendor> getAll() {
+        return vendorRepository.findAll();
+    }
+
+    @Override
+    public Vendor getById(Long id) {
+        return vendorRepository.findById(id).orElse(null);
     }
 }
