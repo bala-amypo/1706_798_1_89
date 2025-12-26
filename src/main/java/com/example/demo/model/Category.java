@@ -9,8 +9,8 @@ import java.util.Set;
 
 @Entity
 @Table(
-    name = "categories",
-    uniqueConstraints = @UniqueConstraint(columnNames = "categoryName")
+        name = "categories",
+        uniqueConstraints = @UniqueConstraint(columnNames = "categoryName")
 )
 public class Category {
 
@@ -36,5 +36,37 @@ public class Category {
         this.createdAt = LocalDateTime.now();
     }
 
-    /* getters and setters */
+    // ===== GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Set<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public Set<CategorizationRule> getRules() {
+        return rules;
+    }
 }

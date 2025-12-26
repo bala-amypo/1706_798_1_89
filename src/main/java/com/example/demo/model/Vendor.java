@@ -10,8 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(
-    name = "vendors",
-    uniqueConstraints = @UniqueConstraint(columnNames = "vendorName")
+        name = "vendors",
+        uniqueConstraints = @UniqueConstraint(columnNames = "vendorName")
 )
 public class Vendor {
 
@@ -41,5 +41,18 @@ public class Vendor {
         this.createdAt = LocalDateTime.now();
     }
 
-    /* getters and setters */
-}
+    // ===== GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getContac
