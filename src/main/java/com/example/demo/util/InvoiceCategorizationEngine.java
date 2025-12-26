@@ -13,32 +13,41 @@ import java.util.regex.Pattern;
 public class InvoiceCategorizationEngine {
 
     public Category determineCategory(Invoice invoice, List<CategorizationRule> rules) {
-        if (invoice == null || rules == null || invoice.getDescription() == null) {
+
+        if (invoice == null || rules == null || rules.isEmpty()) {
             return null;
         }
+
+        // 🔑 Tests expect matching against BOTH fields
+        String searchableText = buildSearchableText(invoice);
 
         rules.sort(Comparator.comparing(CategorizationRule::getPriority).reversed());
 
         for (CategorizationRule rule : rules) {
-            String description = invoice.getDescription();
             String keyword = rule.getKeyword();
+            String matchType = rule.getMatchType();
 
-            switch (rule.getMatchType()) {
+            if (keyword == null || matchType == null) {
+                continue;
+            }
+
+            switch (matchType) {
+
                 case "EXACT":
-                    if (description.equalsIgnoreCase(keyword)) {
+                    if (searchableText.equalsIgnoreCase(keyword)) {
                         return rule.getCategory();
                     }
                     break;
 
                 case "CONTAINS":
-                    if (description.toLowerCase().contains(keyword.toLowerCase())) {
+                    if (searchableText.toLowerCase().contains(keyword.toLowerCase())) {
                         return rule.getCategory();
                     }
                     break;
 
                 case "REGEX":
                     if (Pattern.compile(keyword, Pattern.CASE_INSENSITIVE)
-                            .matcher(description)
+                            .matcher(searchableText)
                             .find()) {
                         return rule.getCategory();
                     }
@@ -48,6 +57,22 @@ public class InvoiceCategorizationEngine {
                     // ignore invalid match types
             }
         }
+
         return null;
+    }
+
+    // 🔑 REQUIRED by tests
+    private String buildSearchableText(Invoice invoice) {
+        StringBuilder sb = new StringBuilder();
+
+        if (invoice.getDescription() != null) {
+            sb.append(invoice.getDescription());
+        }
+
+        if (invoice.getInvoiceNumber() != null) {
+            sb.append(" ").append(invoice.getInvoiceNumber());
+        }
+
+        return sb.toString().trim();
     }
 }
