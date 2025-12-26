@@ -16,18 +16,27 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
+    @PostMapping("/{userId}/{vendorId}")
+    public Invoice upload(
+            @PathVariable Long userId,
+            @PathVariable Long vendorId,
+            @RequestBody Invoice invoice) {
+
+        return invoiceService.uploadInvoice(userId, vendorId, invoice);
+    }
+
     @GetMapping("/{id}")
     public Invoice getInvoice(@PathVariable Long id) {
         return invoiceService.getInvoice(id);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Invoice> getInvoicesByUser(@PathVariable Long userId) {
+    public List<Invoice> getByUser(@PathVariable Long userId) {
         return invoiceService.getInvoicesByUser(userId);
     }
 
     @PostMapping("/categorize")
-    public String categorizeInvoice(@RequestBody String description) {
+    public String categorize(@RequestBody String description) {
         return invoiceService.categorizeInvoice(description);
     }
 }

@@ -7,4 +7,5 @@ public interface InvoiceService {
     Invoice uploadInvoice(Long userId, Long vendorId, Invoice invoice);
     Invoice getInvoice(Long id);
     List<Invoice> getInvoicesByUser(Long userId);
+    String categorizeInvoice(String description);
 }
