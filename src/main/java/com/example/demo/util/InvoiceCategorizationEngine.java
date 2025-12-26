@@ -5,6 +5,7 @@ import com.example.demo.model.CategorizationRule;
 import com.example.demo.model.Invoice;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -18,12 +19,19 @@ public class InvoiceCategorizationEngine {
             return null;
         }
 
-        // 🔑 Tests expect matching against BOTH fields
-        String searchableText = buildSearchableText(invoice);
+        String description = invoice.getDescription();
+        if (description == null) {
+            return null;
+        }
 
-        rules.sort(Comparator.comparing(CategorizationRule::getPriority).reversed());
+        // ✅ FIX: copy rules before sorting (tests pass immutable list)
+        List<CategorizationRule> sortedRules = new ArrayList<>(rules);
+        sortedRules.sort(
+                Comparator.comparing(CategorizationRule::getPriority).reversed()
+        );
 
-        for (CategorizationRule rule : rules) {
+        for (CategorizationRule rule : sortedRules) {
+
             String keyword = rule.getKeyword();
             String matchType = rule.getMatchType();
 
@@ -34,20 +42,21 @@ public class InvoiceCategorizationEngine {
             switch (matchType) {
 
                 case "EXACT":
-                    if (searchableText.equalsIgnoreCase(keyword)) {
+                    if (description.equalsIgnoreCase(keyword)) {
                         return rule.getCategory();
                     }
                     break;
 
                 case "CONTAINS":
-                    if (searchableText.toLowerCase().contains(keyword.toLowerCase())) {
+                    if (description.toLowerCase()
+                            .contains(keyword.toLowerCase())) {
                         return rule.getCategory();
                     }
                     break;
 
                 case "REGEX":
                     if (Pattern.compile(keyword, Pattern.CASE_INSENSITIVE)
-                            .matcher(searchableText)
+                            .matcher(description)
                             .find()) {
                         return rule.getCategory();
                     }
@@ -59,20 +68,5 @@ public class InvoiceCategorizationEngine {
         }
 
         return null;
-    }
-
-    // 🔑 REQUIRED by tests
-    private String buildSearchableText(Invoice invoice) {
-        StringBuilder sb = new StringBuilder();
-
-        if (invoice.getDescription() != null) {
-            sb.append(invoice.getDescription());
-        }
-
-        if (invoice.getInvoiceNumber() != null) {
-            sb.append(" ").append(invoice.getInvoiceNumber());
-        }
-
-        return sb.toString().trim();
     }
 }
