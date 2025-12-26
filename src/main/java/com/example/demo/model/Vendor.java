@@ -55,4 +55,31 @@ public class Vendor {
         this.vendorName = vendorName;
     }
 
-    public String getContac
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public Set<Invoice> getInvoices() {
+        return invoices;
+    }
+}
