@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface InvoiceService {
     Invoice uploadInvoice(Long userId, Long vendorId, Invoice invoice);
-    Invoice getInvoice(Long id);
+    Invoice categorizeInvoice(Long invoiceId);
     List<Invoice> getInvoicesByUser(Long userId);
-    String categorizeInvoice(String description);
+    Invoice getInvoice(Long invoiceId);
 }

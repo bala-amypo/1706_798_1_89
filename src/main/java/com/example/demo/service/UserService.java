@@ -4,7 +4,7 @@ import com.example.demo.model.User;
 import java.util.List;
 
 public interface UserService {
-    User register(User user);
-    User getUser(Long id);
+    User registerUser(User user);
+    User findByEmail(String email);
     List<User> getAllUsers();
 }
