@@ -53,6 +53,9 @@ public class Invoice {
     // ===== GETTERS & SETTERS =====
 
     public Long getId() { return id; }
+public void setId(Long id) {
+    this.id = id;
+}
 
     public Vendor getVendor() { return vendor; }
     public void setVendor(Vendor vendor) { this.vendor = vendor; }

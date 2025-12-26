@@ -1,6 +1,8 @@
 package com.example.demo.security;
 
+import com.example.demo.model.User;
 import io.jsonwebtoken.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,9 +10,11 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "mysecretkeymysecretkeymysecretkey123";
-    private final long EXPIRATION = 86400000;
+    private static final String SECRET_KEY =
+            "mysecretkeymysecretkeymysecretkey123";
+    private static final long EXPIRATION = 86400000;
 
+    /* ===== METHOD USED BY CONTROLLERS ===== */
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
@@ -22,31 +26,29 @@ public class JwtUtil {
                 .compact();
     }
 
+    /* ===== METHOD REQUIRED BY TESTS ===== */
+    public String generateToken(UserDetails userDetails, User user) {
+        return generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
+    /* ===== TOKEN VALIDATION ===== */
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    public String getEmail(String token) {
-        return getClaims(token).getSubject();
-    }
-
-    public Long getUserId(String token) {
-        return getClaims(token).get("userId", Long.class);
-    }
-
-    public String getRole(String token) {
-        return getClaims(token).get("role", String.class);
-    }
-
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+    /* ===== METHOD REQUIRED BY TESTS ===== */
+    public boolean validateToken(String token, UserDetails userDetails) {
+        return validateToken(token);
     }
 }
