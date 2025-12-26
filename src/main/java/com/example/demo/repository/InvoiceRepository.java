@@ -2,17 +2,14 @@ package com.example.demo.repository;
 
 import com.example.demo.model.Invoice;
 import com.example.demo.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface InvoiceRepository {
-
-    Optional<Invoice> findById(Long id);
+public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     List<Invoice> findByUploadedBy(User user);
 
+    // used in tests (mocked)
     List<Invoice> findByAmountGreaterThanHql(double amount);
-
-    Invoice save(Invoice invoice);
 }
