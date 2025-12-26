@@ -1,16 +1,24 @@
-package com.example.demo.service;
-
-import java.util.List;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-public interface UserService {
+public class UserServiceImpl {
 
-    User register(User user);
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    User getUser(Long id);
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+        this.userRepository = repo;
+        this.passwordEncoder = encoder;
+    }
 
-    List<User> getAllUsers();
-
-    User findByEmail(String email); 
+    public User registerUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
 }

@@ -1,13 +1,49 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.Invoice;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
+import com.example.demo.util.InvoiceCategorizationEngine;
+
 import java.util.List;
 
-public interface InvoiceService {
+public class InvoiceServiceImpl {
 
-    String categorizeInvoice(String description);
+    private final InvoiceRepository invoiceRepo;
+    private final UserRepository userRepo;
+    private final VendorRepository vendorRepo;
 
-    Invoice getInvoice(Long id);
+    public InvoiceServiceImpl(
+            InvoiceRepository invoiceRepo,
+            UserRepository userRepo,
+            VendorRepository vendorRepo,
+            CategorizationRuleRepository ruleRepo,
+            InvoiceCategorizationEngine engine) {
 
-    List<Invoice> getInvoicesByUser(Long userId);
+        this.invoiceRepo = invoiceRepo;
+        this.userRepo = userRepo;
+        this.vendorRepo = vendorRepo;
+    }
+
+    public Invoice uploadInvoice(Long userId, Long vendorId, Invoice invoice) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Vendor vendor = vendorRepo.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+
+        invoice.setUploadedBy(user);
+        invoice.setVendor(vendor);
+        return invoiceRepo.save(invoice);
+    }
+
+    public Invoice getInvoice(Long id) {
+        return invoiceRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invoice not found"));
+    }
+
+    public List<Invoice> getInvoicesByUser(Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return invoiceRepo.findByUploadedBy(user);
+    }
 }

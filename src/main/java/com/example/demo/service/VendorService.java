@@ -1,13 +1,17 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import java.util.List;
 import com.example.demo.model.Vendor;
+import com.example.demo.repository.VendorRepository;
 
-public interface VendorService {
+public class VendorServiceImpl {
 
-    Vendor create(Vendor vendor);
+    private final VendorRepository repo;
 
-    List<Vendor> getAll();
+    public VendorServiceImpl(VendorRepository repo) {
+        this.repo = repo;
+    }
 
-    Vendor getById(Long id);
+    public Vendor createVendor(Vendor vendor) {
+        return repo.save(vendor);
+    }
 }

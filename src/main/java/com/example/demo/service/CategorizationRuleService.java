@@ -1,13 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
-import java.util.List;
-import com.example.demo.model.CategorizationRule;
+import com.example.demo.repository.*;
 
-public interface CategorizationRuleService {
+public class CategorizationRuleServiceImpl {
 
-    CategorizationRule createRule(Long categoryId, CategorizationRule rule);
-
-    List<CategorizationRule> getRulesByCategory(Long categoryId);
-
-    void deleteRule(Long ruleId);
+    public CategorizationRuleServiceImpl(
+            CategorizationRuleRepository ruleRepo,
+            CategoryRepository categoryRepo) {}
 }
