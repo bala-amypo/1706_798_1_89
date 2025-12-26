@@ -24,4 +24,3 @@ public class Vendor {
 
     public Set<User> getUsers() { return users; }
 }
-`
