@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rules")
+@RequestMapping("/api/rules")
 public class CategorizationRuleController {
 
     private final CategorizationRuleService ruleService;
@@ -16,8 +16,19 @@ public class CategorizationRuleController {
         this.ruleService = ruleService;
     }
 
-    @GetMapping("/match")
-    public List<CategorizationRule> match(@RequestParam String description) {
-        return ruleService.findMatchingRules(description);
+    @PostMapping("/category/{categoryId}")
+    public CategorizationRule create(@PathVariable Long categoryId,
+                                     @RequestBody CategorizationRule rule) {
+        return ruleService.createRule(categoryId, rule);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public List<CategorizationRule> list(@PathVariable Long categoryId) {
+        return ruleService.getRulesByCategory(categoryId);
+    }
+
+    @DeleteMapping("/{ruleId}")
+    public void delete(@PathVariable Long ruleId) {
+        ruleService.deleteRule(ruleId);
     }
 }

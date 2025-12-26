@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendors")
+@RequestMapping("/api/vendors")
 public class VendorController {
 
     private final VendorService vendorService;
@@ -18,16 +18,11 @@ public class VendorController {
 
     @PostMapping
     public Vendor create(@RequestBody Vendor vendor) {
-        return vendorService.create(vendor);
+        return vendorService.createVendor(vendor);
     }
 
     @GetMapping
     public List<Vendor> getAll() {
-        return vendorService.getAll();
-    }
-
-    @GetMapping("/{id}")
-    public Vendor getById(@PathVariable Long id) {
-        return vendorService.getById(id);
+        return vendorService.getAllVendors();
     }
 }

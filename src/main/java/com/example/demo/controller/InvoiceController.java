@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/api/invoices")
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
@@ -16,27 +16,20 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @PostMapping("/{userId}/{vendorId}")
-    public Invoice upload(
-            @PathVariable Long userId,
-            @PathVariable Long vendorId,
-            @RequestBody Invoice invoice) {
-
+    @PostMapping("/upload/{userId}/{vendorId}")
+    public Invoice upload(@PathVariable Long userId,
+                          @PathVariable Long vendorId,
+                          @RequestBody Invoice invoice) {
         return invoiceService.uploadInvoice(userId, vendorId, invoice);
     }
 
-    @GetMapping("/{id}")
-    public Invoice getInvoice(@PathVariable Long id) {
-        return invoiceService.getInvoice(id);
+    @PostMapping("/categorize/{invoiceId}")
+    public Invoice categorize(@PathVariable Long invoiceId) {
+        return invoiceService.categorizeInvoice(invoiceId);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Invoice> getByUser(@PathVariable Long userId) {
+    public List<Invoice> byUser(@PathVariable Long userId) {
         return invoiceService.getInvoicesByUser(userId);
-    }
-
-    @PostMapping("/categorize")
-    public String categorize(@RequestBody String description) {
-        return invoiceService.categorizeInvoice(description);
     }
 }
