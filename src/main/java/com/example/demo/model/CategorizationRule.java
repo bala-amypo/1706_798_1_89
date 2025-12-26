@@ -1,40 +1,38 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "categorization_rules")
 public class CategorizationRule {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String keyword;
-    private String matchType;
-    private int priority;
-
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @NotBlank
+    private String keyword;
+
+    @NotBlank
+    private String matchType;
+
+    @Positive
+    private Integer priority;
 
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
-
-    public String getKeyword() { return keyword; }
-    public void setKeyword(String keyword) { this.keyword = keyword; }
-
-    public String getMatchType() { return matchType; }
-    public void setMatchType(String matchType) { this.matchType = matchType; }
-
-    public int getPriority() { return priority; }
-    public void setPriority(int priority) { this.priority = priority; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    /* getters and setters */
 }
