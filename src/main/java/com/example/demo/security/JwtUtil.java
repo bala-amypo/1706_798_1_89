@@ -1,12 +1,12 @@
 package com.example.demo.security;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import com.example.demo.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUtil {
 
     public String generateToken(UserDetails userDetails, User user) {
-        return "token";
+        return "mock-token";
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
