@@ -10,10 +10,8 @@ import java.util.List;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-    // Used by InvoiceServiceImpl.getInvoicesByUser(...)
     List<Invoice> findByUploadedBy(User uploadedBy);
 
-    // Used for HQL test case
     @Query("SELECT i FROM Invoice i WHERE i.amount > :amount")
-    List<Invoice> findByAmountGreaterThanHql(@Param("amount") double amount);
+    List<Invoice> findByAmountGreaterThanHql(@Param("amount") Double amount);
 }
