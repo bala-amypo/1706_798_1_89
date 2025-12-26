@@ -1,24 +1,23 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
+import com.example.demo.model.CategorizationRule;
+import com.example.demo.service.CategorizationRuleService;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.model.CategorizationRule;
-import com.example.demo.service.Impl.CategorizationRuleServiceImpl;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/rules")
+@RequestMapping("/rules")
 public class CategorizationRuleController {
 
-    private final CategorizationRuleServiceImpl service;
+    private final CategorizationRuleService ruleService;
 
-    public CategorizationRuleController(CategorizationRuleServiceImpl service) {
-        this.service = service;
+    public CategorizationRuleController(CategorizationRuleService ruleService) {
+        this.ruleService = ruleService;
     }
 
-    @GetMapping("/search")
-    public List<CategorizationRule> search(@RequestParam String text) {
-        return service.getMatchingRules(text);
+    @GetMapping("/match")
+    public List<CategorizationRule> match(@RequestParam String description) {
+        return ruleService.findMatchingRules(description);
     }
 }
