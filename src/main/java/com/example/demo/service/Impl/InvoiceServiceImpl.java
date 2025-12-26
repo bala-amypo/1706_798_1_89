@@ -1,30 +1,49 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Invoice;
-import com.example.demo.service.InvoiceService;
-import org.springframework.stereotype.Service;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
+import com.example.demo.util.InvoiceCategorizationEngine;
 
-import java.util.Collections;
 import java.util.List;
 
-@Service
-public class InvoiceServiceImpl implements InvoiceService {
+public class InvoiceServiceImpl {
 
-    @Override
-    public String categorizeInvoice(String description) {
-        // Simple placeholder logic
-        return "UNCATEGORIZED";
+    private final InvoiceRepository invoiceRepo;
+    private final UserRepository userRepo;
+    private final VendorRepository vendorRepo;
+
+    public InvoiceServiceImpl(
+            InvoiceRepository invoiceRepo,
+            UserRepository userRepo,
+            VendorRepository vendorRepo,
+            CategorizationRuleRepository ruleRepo,
+            InvoiceCategorizationEngine engine) {
+
+        this.invoiceRepo = invoiceRepo;
+        this.userRepo = userRepo;
+        this.vendorRepo = vendorRepo;
     }
 
-    @Override
+    public Invoice uploadInvoice(Long userId, Long vendorId, Invoice invoice) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Vendor vendor = vendorRepo.findById(vendorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found"));
+
+        invoice.setUploadedBy(user);
+        invoice.setVendor(vendor);
+        return invoiceRepo.save(invoice);
+    }
+
     public Invoice getInvoice(Long id) {
-        // Stub implementation
-        return null;
+        return invoiceRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Invoice not found"));
     }
 
-    @Override
     public List<Invoice> getInvoicesByUser(Long userId) {
-        // Stub implementation
-        return Collections.emptyList();
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return invoiceRepo.findByUploadedBy(user);
     }
 }

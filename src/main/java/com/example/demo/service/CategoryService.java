@@ -1,7 +1,10 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.repository.CategoryRepository;
+import com.example.demo.model.Category;
+import java.util.List;
 
-public class CategoryServiceImpl {
-    public CategoryServiceImpl(CategoryRepository repo) {}
+public interface CategoryService {
+    Category create(Category category);
+    List<Category> getAll();
+    Category getById(Long id);
 }

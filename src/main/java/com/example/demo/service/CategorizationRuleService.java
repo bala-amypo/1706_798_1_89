@@ -1,10 +1,8 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.repository.*;
+import com.example.demo.model.CategorizationRule;
+import java.util.List;
 
-public class CategorizationRuleServiceImpl {
-
-    public CategorizationRuleServiceImpl(
-            CategorizationRuleRepository ruleRepo,
-            CategoryRepository categoryRepo) {}
+public interface CategorizationRuleService {
+    List<CategorizationRule> findMatchingRules(String description);
 }
