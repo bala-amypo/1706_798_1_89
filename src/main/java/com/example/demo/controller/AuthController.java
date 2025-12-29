@@ -1,10 +1,3 @@
-package com.example.demo.controller;
-
-import com.example.demo.model.User;
-import com.example.demo.service.AuthService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -15,15 +8,13 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // LOGIN
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        return ResponseEntity.ok(authService.login(user));
+    @PostMapping("/register")
+    public Object register(@RequestBody User user) {
+        return authService.register(user);
     }
 
-    // REGISTER
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        return ResponseEntity.ok(authService.register(user));
+    @PostMapping("/login")
+    public Object login(@RequestBody User user) {
+        return authService.login(user);
     }
 }
