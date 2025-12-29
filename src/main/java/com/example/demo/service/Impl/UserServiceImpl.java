@@ -22,14 +22,17 @@ public class UserServiceImpl implements UserService {
         this.jwtUtil = jwtUtil;
     }
 
+    // ✅ REGISTER
     @Override
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
+    // ✅ LOGIN (MATCHES JwtUtil.generateToken(Long, String, String))
     @Override
     public String login(User user) {
+
         User dbUser = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
@@ -37,6 +40,11 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return jwtUtil.generateToken(dbUser.getEmail());
+        // 🔑 CORRECT METHOD CALL
+        return jwtUtil.generateToken(
+                dbUser.getId(),
+                dbUser.getEmail(),
+                dbUser.getRole()
+        );
     }
 }
