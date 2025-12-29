@@ -18,8 +18,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AppUser> register(@RequestBody AuthRequest request) {
-        AppUser user = UserService.register(request.getEmail(), request.getPassword(), "USER");
+    public ResponseEntity<User> register(@RequestBody AuthRequest request) {
+        User user = UserService.register(request.getEmail(), request.getPassword(), "USER");
         return ResponseEntity.ok(user);
     }
 
