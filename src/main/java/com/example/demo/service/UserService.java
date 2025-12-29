@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 
-public interface AuthService {
+public interface UserService {
 
     Object login(User user);
 
