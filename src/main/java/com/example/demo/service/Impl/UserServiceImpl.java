@@ -3,14 +3,14 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.AppUser;
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.repository.AppUserRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.AppUserService;
+import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements AppUserService {
+public class UserServiceImpl implements UserService {
     
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
