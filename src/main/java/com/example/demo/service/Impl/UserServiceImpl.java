@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppUser register(String email, String password, String role) {
+    public User register(String email, String password, String role) {
         if (email == null || email.trim().isEmpty()) {
             throw new BadRequestException("Email cannot be null or empty");
         }
@@ -40,14 +40,14 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Email must be unique");
         }
         
-        AppUser user = AppUser.builder()
+        User user = User.builder()
                 .email(email.trim())
                 .password(passwordEncoder.encode(password))
                 .role(role.trim())
                 .active(true)
                 .build();
         
-        return appUserRepository.save(user);
+        return UserRepository.save(user);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Password cannot be null or empty");
         }
         
-        AppUser user = appUserRepository.findByEmail(email.trim())
+        User user = appUserRepository.findByEmail(email.trim())
                 .orElseThrow(() -> new BadRequestException("Invalid credentials"));
         
         if (!passwordEncoder.matches(password, user.getPassword())) {
