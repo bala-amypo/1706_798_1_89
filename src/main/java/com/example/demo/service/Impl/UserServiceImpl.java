@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.AuthResponse;
-import com.example.demo.entity.AppUser;
+import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     
-    private final AppUserRepository appUserRepository;
+    private final UserRepository UserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     
-    public AppUserServiceImpl(AppUserRepository appUserRepository, 
+    public AppUserServiceImpl(AppUserRepository UserRepository, 
                               PasswordEncoder passwordEncoder,
                               JwtTokenProvider jwtTokenProvider) {
-        this.appUserRepository = appUserRepository;
+        this.UserRepository = UserRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
